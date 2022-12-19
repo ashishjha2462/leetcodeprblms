@@ -1,0 +1,64 @@
+class Solution:
+    def targetIndices(self, nums: List[int], target: int) -> List[int]:
+        nums.sort()
+        l = [-1, -1]
+        n=len(nums)
+        if n < 1:
+            l = [-1, -1]
+        elif n == 1 and target == nums[0]:
+            l = [0, 0]
+        elif n == 2 and target == nums[0] and target == nums[1]:
+            l = [0, 1]
+
+        elif target < nums[0] or target > nums[n-1]:
+            l = []
+            
+        else:
+            start=0
+            end=n
+            found=0
+            while(start<end):
+                lin=int((start+end)/2)
+                if(nums[lin]==target):                    
+                    found=1
+                    s=lin
+                    start = end+1
+                    break
+
+                elif(nums[lin]>target):
+                    end=lin
+
+                elif(nums[lin]<target):
+                    start=lin+1
+
+            if(found!=1):
+                l = []
+
+            else:
+                j=s
+                while(s!=-1 and nums[s]==target):
+                    l[0]=s
+                    if l[1] == -1:
+                        l[1]=s
+                    s-=1
+
+                while(j!=n and nums[j]==target):
+                    l[1]=j
+                    if l[0] == -1:
+                        l[0]=j
+                    j+=1
+        if len(l) > 1:
+            if l[1] == -1:
+                l.remove(-1)
+        if len(l) > 1:
+            if l[0] == -1:
+                l.remove(-1)
+        if len(l) == 2:
+            if l[0] == l[1]:
+                l.remove(l[1])
+        if len(l) > 1:
+            st = l[0]
+            en = l[1]
+            for i in range(st+1,en):
+                l.insert(-1,i)
+        return l
